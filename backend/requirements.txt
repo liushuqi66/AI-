@@ -1,0 +1,14 @@
+# Core
+flask>=3.0,<4.0
+flask-cors>=4.0,<5.0
+python-dotenv>=1.0,<2.0
+werkzeug>=3.0,<4.0
+
+# PDF Parsing
+PyMuPDF>=1.23.0,<2.0
+
+# AI Model (OpenAI-compatible API)
+openai>=1.0.0,<2.0
+
+# Cache (optional - system degrades gracefully without Redis)
+redis>=5.0,<6.0

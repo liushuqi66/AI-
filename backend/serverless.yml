@@ -1,0 +1,48 @@
+# Alibaba Cloud Function Compute (FC) Deployment Configuration
+# Deploy with: s deploy
+
+edition: 3.0.0
+name: resume-analyzer
+
+access: "default"
+
+vars:
+  region: "cn-hangzhou"
+  service:
+    name: "resume-analyzer-service"
+    description: "AI-powered resume analysis system"
+
+resources:
+  resume_analyzer:
+    component: fc3
+    props:
+      region: ${vars.region}
+      functionName: "resume-analyzer-api"
+      description: "简历智能分析系统 - Flask RESTful API"
+      runtime: "python3.10"
+      code: ./
+      handler: "index.handler"
+      memorySize: 512
+      timeout: 120
+      instanceConcurrency: 10
+      environmentVariables:
+        FLASK_ENV: "production"
+        FLASK_PORT: "9000"
+        PYTHONUNBUFFERED: "1"
+      # Custom domain (optional)
+      customDomains:
+        - domainName: "auto"
+          protocol: "HTTP"
+          routeConfigs:
+            - path: "/*"
+
+  # NAS storage for uploaded files (optional)
+  resume_analyzer_nas:
+    component: fc3
+    props:
+      region: ${vars.region}
+      functionName: "resume-analyzer-api"
+      nasConfig:
+        mountPoints:
+          - serverAddr: "auto"
+            mountDir: "/mnt/resume-uploads"

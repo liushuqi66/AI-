@@ -1,0 +1,46 @@
+# ── Python ──────────────────────────────
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+venv/
+.venv/
+env/
+
+# ── Environment ──────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── IDE ──────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── OS ───────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── Uploads (temp files) ────────────────
+backend/uploads/*.pdf
+
+# ── Node ─────────────────────────────────
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ── Logs ─────────────────────────────────
+*.log
+logs/
+
+# ── Cache ────────────────────────────────
+.cache/
+.pytest_cache/
+.mypy_cache/

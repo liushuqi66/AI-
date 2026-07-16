@@ -1,0 +1,51 @@
+name: Deploy Backend to Alibaba Cloud FC
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'backend/**'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Lint with flake8
+        run: |
+          pip install flake8
+          cd backend
+          flake8 . --count --max-complexity=10 --statistics
+
+      - name: Check syntax
+        run: |
+          cd backend
+          python -c "import ast; [ast.parse(open(f, encoding='utf-8').read()) for f in ['app.py','config.py','pdf_parser.py','resume_extractor.py','resume_matcher.py','cache_manager.py','utils.py','middleware.py']]; print('All files OK')"
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Alibaba Cloud FC
+        uses: aliyun/serverless-deploy-action@v1
+        with:
+          working-directory: backend
+        env:
+          ALIBABA_CLOUD_ACCESS_KEY_ID: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_ID }}
+          ALIBABA_CLOUD_ACCESS_KEY_SECRET: ${{ secrets.ALIBABA_CLOUD_ACCESS_KEY_SECRET }}
